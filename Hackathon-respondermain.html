@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <script type="text/javascript" src="covid-19.js"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
+    <script>
+    function getCheckedBoxes(chkboxName) {
+      var checkboxes = document.getElementsByClassName(chkboxName);
+      var checkboxesChecked = [];
+      // loop over them all
+      for (var i=0; i<checkboxes.length; i++) {
+         // And stick the checked ones onto an array...
+         if (checkboxes[i].checked) {
+            checkboxesChecked.push(checkboxes[i].value);
+         }
+      }
+      // Return the array if it is non-empty, or null
+      return checkboxesChecked.length > 0 ? checkboxesChecked : null;
+    }
+
+
+    function search(){
+      var services = getCheckedBoxes("serviceCheck");
+      getData(services, forDate.value);
+    }
+    </script>
+  </head>
+  <body style="background-color:lightblue">
+  <center>
+  <h1><big>Welcome COVID 19 Warrior!</big></h1>
+
+  <div>
+  <form >
+    <form >
+      <fieldset>
+      <p>Search for Volunteers on:</p><br />
+      <input type="date" id="forDate" name="forDate" value="Date()"></br>
+
+        <div class="float"></div>
+    <p>For Services:</p>
+    Housing: <input type="checkbox" class="serviceCheck" value="House" id="housing"/><br/>
+    Dropping Off Groceries: <input type="checkbox" class="serviceCheck" value="Grocery" id="groceryproviders"/><br/>
+    Childcare: <input type="checkbox" class="serviceCheck" value="Childcare" id="childcare"/><br/>
+  <div class="float"></div> <br />
+  <input class="align" type="button" value="Search" onclick="search()"/>
+    </fieldset>
+
+    <div id="map" style="width:450px;height:450px;">
+      <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap">
+      </script>
+      </div>
+  </div>
+  </body>
+
+  </html>

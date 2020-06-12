@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="This is a website to provide the services of housing, grocery shopping, and plasma donation for the first-responders of COVID-19."
+    <title><b><big>Help The COVID 19 Frontline Warriors</big></b></title>
+  </head>
+  <body style="background-color:lightblue">
+    <h1><center>Welcome to the Page for Volunteers!</h1>
+<p><center><big>Have you tested positive for COVID-19?</big></center></p>
+    <p align="center">
+       <a href="sorry.html"><button type="button" id="buty"> YES</button></a>
+    </p>
+    <p align="center">
+       <button onclick="myFunction()" id="butn"> NO</button>
+    </p>
+    <p id="demo"></p>
+    <p id="yes"><center></center></p>
+    <p id="no"><center></center></p>
+    <script>
+      function myFunction() {
+          document.getElementById("demo").innerHTML = "<big><center>Have you shown any symptoms of COVID-19 OR has anyone around you tested positive?</big></center>";
+          var center = document.createElement("center");
+          var button = document.createElement("button");
+          button.innerHTML = "YES";
+          center.appendChild(button);
+          button.addEventListener ("click", function() {
+             location.href = "sorry.html";
+          });
+          var y = document.getElementById("yes");
+          y.appendChild(center);
+
+          var centertwo = document.createElement("center");
+          var buttontwo = document.createElement("button");
+          buttontwo.innerHTML = "NO";
+          centertwo.appendChild(buttontwo);
+          var n = document.getElementById("no");
+          n.appendChild(centertwo);
+          buttontwo.addEventListener ("click", function() {
+             location.href = "volunteermain.html";
+          });
+          document.getElementById("butn").disabled = true;
+     }
+</script>
+</body>
+</html>
