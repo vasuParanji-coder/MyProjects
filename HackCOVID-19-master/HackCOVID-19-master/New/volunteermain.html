@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html>
+  <style>
+     /* Style the tab */
+.tab {
+  overflow: hidden;
+  border: 1px solid #ccc;
+  background-color: lightblue;
+}
+
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  float: left;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  padding: 14px 16px;
+  transition: 0.3s;
+  font-size: 17px;
+}
+
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #ddd;
+}
+
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #ccc;
+}
+
+/* Style the tab content */
+.tabcontent {
+  display: none;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-top: none;
+}
+  </style>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="description" content="This is a website to provide the services of housing, grocery shopping, and plasma donation for the first-responders of COVID-19.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COVID-19 Service Provider</title>
+    <script type="text/javascript" src="covid-19.js"></script>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
+    <script>
+
+    function getCheckedBoxes(chkboxName) {
+      var checkboxes = document.getElementsByClassName(chkboxName);
+      var checkboxesChecked = [];
+      // loop over them all
+      for (var i=0; i<checkboxes.length; i++) {
+         // And stick the checked ones onto an array...
+         if (checkboxes[i].checked) {
+            checkboxesChecked.push(checkboxes[i].value);
+         }
+      }
+      // Return the array if it is non-empty, or null
+      return checkboxesChecked.length > 0 ? checkboxesChecked : null;
+    }
+    function submitData()
+    {
+      var detailStr = "" ;
+      if(txtRequests.value)
+        detailStr += txtRequests.value;
+      if (pet.checked)
+        detailStr += "\r\nHave Pets";
+      if(nopet.checked)
+        detailStr += "\r\nNo Pets";
+      if (smoker.checked)
+        detailStr += "\r\nSmoker";
+      if(nonsmoker.checked)
+        detailStr += "\r\nNon-Smoker";
+      if (csmoker.checked)
+        detailStr += "\r\nSmoker";
+      if(cnonsmoker.checked)
+        detailStr += "\r\nNon-Smoker";
+
+
+     var data = {
+          name: txtName.value,
+          phone: txtPhoneNum.value,
+          address: {
+            address1: txtAddress.value,
+            city: txtCity.value,
+            zipcode: txtZipcode.value,
+            state: optState.value,
+          },
+          details: detailStr
+        }
+      var services = getCheckedBoxes("serviceCheck");
+      saveData(services, data, startDate.value, endDate.value);
+    }
+  </script>
+</head>
+
+  <body style="background-color:lightblue">
+    <center>
+    <h1>Welcome to the Page for Service Providers!</h1>
+    <p><big>Name:</p>
+    <input type="text" size="25" name="txtName" id="txtName"></big>
+    <p><big>Phone Number:</p>
+    <input type="text" size="25" name="txtPhoneNum" id="txtPhoneNum"></big>
+    <p><big>Address:</p>
+    <input type="text" size="25" name="txtAddress" id="txtAddress"></big>
+    <p><big>City:</p>
+    <input type="text" size="25" name="txtCity" id="txtCity"></big>
+    <p><big>State:</p></big>
+    <select id="optState">
+        <option value="alabama">Alabama</option>
+        <option value="alaska">Alaska</option>
+        <option value="arizona">Arizona</option>
+        <option value="arkansas">Arkansas</option>
+        <option value="california">California</option>
+        <option value="connecticut">Connecticut</option>
+        <option value="delaware">Delaware</option>
+        <option value="florida">Florida</option>
+        <option value="georgia">Georgia</option>
+        <option value="hawaii">Hawaii</option>
+        <option value="idaho">Idaho</option>
+        <option value="illinois">Illinois</option>
+        <option value="indiana">Indiana</option>
+        <option value="iowa">Iowa</option>
+        <option value="kansas">Kansas</option>
+        <option value="kentucky">Kentucky</option>
+        <option value="louisiana">Louisiana</option>
+        <option value="maine">Maine</option>
+        <option value="maryland">Maryland</option>
+        <option value="massachusetts">Massachusetts</option>
+        <option value="michigan">Michigan</option>
+        <option value="minnesota">Minnesota</option>
+        <option value="mississippi">Mississippi</option>
+        <option value="missouri">Missouri</option>
+        <option value="montana">Montana</option>
+        <option value="nebraska">Nebraska</option>
+        <option value="nevada">Nevada</option>
+        <option value="new hampshire">New Hampshire</option>
+        <option value="new jersey">New Jersey</option>
+        <option value="new mexico">New Mexico</option>
+        <option value="new york">New York</option>
+        <option value="north carolina">North Carolina</option>
+        <option value="north dakota">North Dakota</option>
+        <option value="ohio">Ohio</option>
+        <option value="oklahoma">Oklahoma</option>
+        <option value="oregon">Oregon</option>
+        <option value="pennsylvania">Pennsylvania</option>
+        <option value="rhode island">Rhode Island</option>
+        <option value="south carolina">South Carolina</option>
+        <option value="south dakota">South Dakota</option>
+        <option value="tennessee">Tennessee</option>
+        <option value="texas">Texas</option>
+        <option value="utah">Utah</option>
+        <option value="vermont">Vermont</option>
+        <option value="virginia">Virginia</option>
+        <option value="washington">Washington</option>
+        <option value="west virginia">West Virginia</option>
+        <option value="wisconsin">Wisconsin</option>
+        <option value="wyoming">Wyoming</option>
+    </select>
+    <p><big>Zip Code:</p><input type="text" size="25" id="txtZipcode" required/></big>
+    <p><big>What type(s) of service would you like to offer?</p></big>
+    Housing: <input type="checkbox" class="serviceCheck" value="House" id="housing" onclick="housing()"><br/>
+    Dropping Off Groceries: <input type="checkbox" class="serviceCheck" value="Grocery" id="groceryproviders" onclick="grocery()"><br/>
+    Childcare: <input type="checkbox" class="serviceCheck" value="Childcare" id="childcare" onclick="childcare()"><br/>
+    <p id="drop-off"><big>Start Date:</big></p>
+    <input type="date" id="startDate" name="startDate" value="Date()">
+    <p id="drop-off"><big>End Date:</big></p>
+    <input type="date" id="endDate" name="endDate" value="Date()"><br/>
+    <p id="req"><big>Do you have any special requests?</big></p>
+    <input type="text" id="txtRequests" name="txtRequests"><br/><br/>
+    <div class="tab">
+  <button class="tablinks" onclick="openCity(event, 'House')" id="house" disabled>House</button>
+  <button class="tablinks" onclick="openCity(event, 'Grocery')" id="grocery" disabled>Grocery</button>
+  <button class="tablinks" onclick="openCity(event, 'Childcare')" id="child" disabled>Childcare</button>
+</div>
+
+<div id="Details" name="Details" style="height:400px; width:400px;">
+<div id="House" class="tabcontent">
+  <p id="pets">Do you have any pets?</p>
+       YES: <input type="radio" class="pets" id="pet" name="pets"><br/>
+       NO: <input type="radio" class="pets" id="nopet" name="pets"><br/>
+       <p id="smoking">Do you smoke?</p>
+       YES: <input type="radio" name="smoke" id="smoker"><br/>
+       NO: <input type="radio" name="smoke" id="nonsmoker"><br/>
+
+</div>
+<div id="Grocery" class="tabcontent">
+</div>
+<div id="Childcare" class="tabcontent">
+  <p id="smoking">Do you smoke?</p>
+       YES: <input type="radio" class="smoke" id="csmoker" name="smoke"><br/>
+       NO: <input type="radio" class="smoke" id="cnonsmoker" name="smoke"><br/>
+
+</div>
+</div>
+<script>
+function openCity(evt, cityName) {
+  var i, tabcontent, tablinks;
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+  document.getElementById(cityName).style.display = "block";
+  evt.currentTarget.className += " active";
+}
+</script>
+    <input class="align" type="submit" value="Submit" id="submit" onclick="funct()">
+
+</center>
+
+    <script>
+    function funct() {
+         var name = document.getElementById("txtName").value;
+         if(name == "") {
+             alert("Enter a name.");
+         }
+         var phone = document.getElementById("txtPhoneNum").value;
+         if(phone == "") {
+             alert("Enter a phone number.");
+         }
+         else if(isNaN(phone)) {
+             alert("Your phone number must have only numbers.");
+         }
+         var address = document.getElementById("txtAddress").value;
+         if(address == "") {
+             alert("Enter an address.");
+         }
+         var val = document.getElementById("txtCity").value;
+         var letters = /^[a-zA-Z]+$/;
+         if(val == "") {
+             alert("Enter a city value.");
+         }
+         /*else if(!val.match(letters)) {
+             alert("Your city must have only letters.");
+         }*/
+         var zip = document.getElementById("txtZipcode").value;
+         if(zip == "") {
+             alert("Enter a zip code.");
+         }
+         else if(isNaN(zip)) {
+             alert("Your zip code must have only numbers.");
+         }
+         var start = document.getElementById("startDate").value;
+         var end = document.getElementById("endDate").value;
+         if(!Boolean(start)) {
+             alert("Enter a start date.");
+         }
+         else if(notAfterToday(start)) {
+             alert("You have an incorrect start date.");
+         }
+         if(!Boolean(end)) {
+             alert("Enter an end date.");
+         }
+         else if((notAfterToday(end)) || (notAfter(end, start))) {
+             alert("You have an incorrect end date.");
+         }
+         if((!isNaN(zip)) && (!isNaN(phone)) && (val.match(letters)) && (!notAfterToday(start)) && (!notAfterToday(end)) && (!notAfter(end, start))) {
+             alert("Your data has been submitted. Thank you!");
+             submitData();
+         }
+    }
+
+    function notAfterToday(dateParameter) {
+        var today = new Date();
+        return dateParameter <= today;
+    }
+
+    function notAfter(dateParamOne, dateParamTwo) {
+        return dateParamOne <= dateParamTwo;
+    }
+
+       function housing() {
+            var house = document.getElementById("housing");
+           var groc = document.getElementById("groceryproviders");
+           var child = document.getElementById("childcare");
+           if(house.checked == true) {
+              document.getElementById("submit").disabled = false;
+              document.getElementById("house").disabled = false;
+           }
+           if(house.checked == false) {
+             document.getElementById("house").disabled = true;
+           }
+           if(house.checked == false && groc.checked == false && child.checked == false) {
+              document.getElementById("submit").disabled = true;
+           }
+       }
+       function grocery() {
+           var house = document.getElementById("housing");
+           var groc = document.getElementById("groceryproviders");
+           var child = document.getElementById("childcare");
+           if(groc.checked == true) {
+              document.getElementById("submit").disabled = false;
+              document.getElementById("grocery").disabled = false;
+           }
+           if(groc.checked == false) {
+              document.getElementById("grocery").disabled = true;
+           }
+           if(house.checked == false && groc.checked == false && child.checked == false) {
+              document.getElementById("submit").disabled = true;
+           }
+       }
+       function childcare() {
+           var house = document.getElementById("housing");
+           var groc = document.getElementById("groceryproviders");
+           var child = document.getElementById("childcare");
+           if(child.checked == true) {
+              document.getElementById("submit").disabled = false;
+              document.getElementById("child").disabled = false;
+           }
+           if(child.checked == false) {
+              document.getElementById("child").disabled = true;
+           }
+           if(house.checked == false && groc.checked == false && child.checked == false) {
+              document.getElementById("submit").disabled = true;
+           }
+       }
+    </script>
+    </div>
+  </body>
+</html>
